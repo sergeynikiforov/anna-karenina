@@ -14,11 +14,24 @@
         <p>Your query: {{ query }}</p>
     {% endif %}
     {% if paragraphs %}
-        <ul>
-            {% for paragraph in paragraphs.all %}
-                <li><p>{{ paragraph.text }}</p></li>
-            {% endfor %}
-        </ul>
+    <div class="pagination">
+        <span class="step-links">
+            {% if paragraphs.has_previous %}
+                <a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">previous</a>
+            {% endif %}
+            <span class="current">
+                Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
+            </span>
+            {% if paragraphs.has_next %}
+                <a href="?query={{ query }}&page={{ paragraphs.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+    <ul>
+        {% for paragraph in paragraphs %}
+            <li><p>{{ paragraph.text }}</p></li>
+        {% endfor %}
+    </ul>
     {% else %}
         <p>No paragraphs available.</p>
     {% endif %}

@@ -9,7 +9,7 @@ class Paragraph(models.Model):
 
 
 class Word(models.Model):
-    word = models.TextField()
+    word = models.CharField(max_length=100, db_index=True)
     paragraphs = models.ManyToManyField(Paragraph)
 
     def __str__(self):

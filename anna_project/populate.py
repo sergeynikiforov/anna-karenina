@@ -4,6 +4,7 @@ import sys
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'anna_project.settings')
 
 import re
+import time
 
 import django
 django.setup()
@@ -19,10 +20,10 @@ def populate(filepath):
     filepath: str representing a path to a text file
     return: None
     """
-
+    start = time.time()
     # store all words
-    all_words = set([])
-    counter = 0
+    #all_words = set([])
+    p_counter = 0
 
     # start reading from file
     with open(filepath) as f:
@@ -38,7 +39,7 @@ def populate(filepath):
             # create paragraph
             cur_papagraph = Paragraph.objects.create(text=line)
             cur_papagraph.save()
-            counter += 1
+            p_counter += 1
 
             # get words from the line
             word_list = [w.lower() for w in reg_obj.findall(line)]
@@ -47,9 +48,11 @@ def populate(filepath):
             for word in word_list:
                 obj, created = Word.objects.get_or_create(word=word)
                 obj.paragraphs.add(cur_papagraph)
-                all_words.add(word)
-
-    print('{} words were added to the Word table\n{} paragraphs were added to the Paragraph table'.format(len(all_words), counter))
+                #all_words.add(word)
+    elapsed = time.time() - start
+    w_counter = Word.objects.count()
+    print('{} words were added to the Word table\n{} paragraphs were added to the Paragraph table'.format(w_counter, p_counter))
+    print('Running time: {}'.format(elapsed))
     return
 
 
