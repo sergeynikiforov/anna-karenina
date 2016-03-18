@@ -1,0 +1,12 @@
+{% extends "anna/base.html" %}
+{% block main %}
+    <h1>Anna Karenina</h1>
+    <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
+        {{ form }}
+        <!--
+        <label for="">Search: </label>
+        <input id="query" type="text" name="query" placeholder="Type your query here...">
+        -->
+        <input type="submit" value="search">
+    </form>
+{% endblock main %}

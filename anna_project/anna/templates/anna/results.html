@@ -1,0 +1,25 @@
+{% extends "anna/base.html" %}
+{% block main %}
+    <h1>Anna Karenina</h1>
+    <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
+        {{ form }}
+        <!--
+        <label for="">Search: </label>
+        <input id="query" type="text" name="query" placeholder="Type your query here...">
+        -->
+        <input type="submit" value="search">
+    </form>
+    <h2>Search results:</h2>
+    {% if query %}
+        <p>Your query: {{ query }}</p>
+    {% endif %}
+    {% if paragraphs %}
+        <ul>
+            {% for paragraph in paragraphs.all %}
+                <li><p>{{ paragraph.text }}</p></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No paragraphs available.</p>
+    {% endif %}
+{% endblock main %}
