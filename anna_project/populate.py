@@ -9,7 +9,6 @@ import time
 import django
 django.setup()
 
-# import models
 from anna.models import Word, Paragraph
 
 
@@ -22,7 +21,7 @@ def populate(filepath):
     """
     start = time.time()
     # store all words
-    #all_words = set([])
+    all_words = {}
     p_counter = 0
 
     # start reading from file
@@ -38,19 +37,24 @@ def populate(filepath):
         for line in f:
             # create paragraph
             cur_papagraph = Paragraph.objects.create(text=line)
-            cur_papagraph.save()
             p_counter += 1
 
             # get words from the line
-            word_list = [w.lower() for w in reg_obj.findall(line)]
+            word_list = (w.lower() for w in reg_obj.findall(line))
 
             # add words to DB
             for word in word_list:
-                obj, created = Word.objects.get_or_create(word=word)
-                obj.paragraphs.add(cur_papagraph)
+                if word in all_words:
+                    all_words[word].paragraphs.add(cur_papagraph)
+                else:
+                    obj = Word.objects.create(word=word)
+                    obj.paragraphs.add(cur_papagraph)
+                    all_words[word] = obj
+                #obj, created = Word.objects.get_or_create(word=word)
+                #obj.paragraphs.add(cur_papagraph)
                 #all_words.add(word)
     elapsed = time.time() - start
-    w_counter = Word.objects.count()
+    w_counter = len(all_words) #Word.objects.count()
     print('{} words were added to the Word table\n{} paragraphs were added to the Paragraph table'.format(w_counter, p_counter))
     print('Running time: {}'.format(elapsed))
     return
