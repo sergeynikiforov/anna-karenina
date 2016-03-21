@@ -1,12 +1,21 @@
 {% extends "anna/base.html" %}
+{% load staticfiles %}
 {% block main %}
-    <h1>Anna Karenina</h1>
-    <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
-        {{ form }}
-        <!--
-        <label for="">Search: </label>
-        <input id="query" type="text" name="query" placeholder="Type your query here...">
-        -->
-        <input type="submit" value="search">
-    </form>
+    <div class="callout large primary">
+        <div class="row column text-center">
+            <h1><strong>Anna Karenina</strong></h1>
+            <h3 class="subheader">by Leo Tolstoy</h3>
+        </div>
+    </div>
+    <div class="row medium-8 large-7 columns">
+        <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
+            <div class="input-group">
+                <span class="input-group-label">Query:</span>
+                <input id="query" type="text" class="input-group-field" name="query">
+                <div class="input-group-button">
+                    <input type="submit" class="button" value="search">
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock main %}

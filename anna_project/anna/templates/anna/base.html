@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!doctype html>
 <html class="no-js" lang="ru">
     <head>
@@ -6,6 +7,7 @@
         <title>Anna Karenina</title>
         <meta name="author" content="Sergey Nikiforov" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'anna/css/foundation.min.css' %}" />
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -13,5 +15,7 @@
         <![endif]-->
         {% block main %}
         {% endblock main %}
+        <script src="{% static 'anna/js/vendor/jquery.min.js' %}"></script>
+        <script src="{% static 'anna/js/foundation.min.js' %}"></script>
     </body>
 </html>

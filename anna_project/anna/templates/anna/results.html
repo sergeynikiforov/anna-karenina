@@ -1,38 +1,65 @@
 {% extends "anna/base.html" %}
+{% load staticfiles %}
 {% block main %}
-    <h1>Anna Karenina</h1>
-    <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
-        {{ form }}
-        <!--
-        <label for="">Search: </label>
-        <input id="query" type="text" name="query" placeholder="Type your query here...">
-        -->
-        <input type="submit" value="search">
-    </form>
-    <h2>Search results:</h2>
-    {% if query %}
-        <p>Your query: {{ query }}</p>
-    {% endif %}
-    {% if paragraphs %}
-    <div class="pagination">
-        <span class="step-links">
+    <div class="callout {% if paragraphs %}success{% else %}alert{% endif %} primary">
+        <div class="row column text-center">
+            <h1><a href="{% url 'anna:index' %}"><strong>Anna Karenina</strong></a></h1>
+        </div>
+    </div>
+    <div class="row medium-8 large-7 columns">
+        <form action="{% url 'anna:results' %}" method="get" accept-charset="utf-8">
+            <div class="input-group">
+                <span class="input-group-label">Query:</span>
+                <input id="query" type="text" class="input-group-field" name="query" value="{{ query }}">
+                <div class="input-group-button">
+                    <input type="submit" class="button" value="search">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row medium-10 large-9 columns">
+        {% if num_paragraphs == 0 %}
+            <h6 class="subheader">No paragraphs matching your query</h6>
+        {% endif %}
+        {% if num_paragraphs %}
+            {% if num_paragraphs == 1 %}
+                <h6 class="subheader">{{ num_paragraphs }} paragraph</h6>
+            {% else %}
+                <h6 class="subheader">{{ num_paragraphs }} paragraphs</h6>
+            {% endif %}
+        {% endif %}
+        <hr>
+        {% if paragraphs %}
+        <ul class="pagination" role="navigation" aria-label="Pagination">
             {% if paragraphs.has_previous %}
-                <a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">previous</a>
+                <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
             {% endif %}
             <span class="current">
                 Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
             </span>
             {% if paragraphs.has_next %}
-                <a href="?query={{ query }}&page={{ paragraphs.next_page_number }}">next</a>
+                <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
             {% endif %}
-        </span>
+        </ul>
+        <ul class="no-bullet">
+            {% for paragraph in paragraphs %}
+                <li><p>{{ paragraph.text }}</p></li>
+            {% endfor %}
+        </ul>
+        <ul class="pagination" role="navigation" aria-label="Pagination">
+            {% if paragraphs.has_previous %}
+                <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
+            {% endif %}
+            <span class="current">
+                Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
+            </span>
+            {% if paragraphs.has_next %}
+                <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
+            {% endif %}
+        </ul>
+        <hr>
+        {% else %}
+            <p>No paragraphs available</p>
+        {% endif %}
     </div>
-    <ul>
-        {% for paragraph in paragraphs %}
-            <li><p>{{ paragraph.text }}</p></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-        <p>No paragraphs available.</p>
-    {% endif %}
 {% endblock main %}
