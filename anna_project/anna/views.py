@@ -4,10 +4,14 @@ from django.http import HttpResponse
 from .models import Paragraph, Word
 from .forms import QueryForm
 
+# parser imports
+from .lexer import anna_lexer
+from .parser import parse
+
 
 def index(request):
     """
-    view for the index page of the app
+    view for the index page of the apps
     """
     form = QueryForm()
     context = {'form': form}
@@ -20,6 +24,7 @@ def searchResults(request):
     """
     context = {}
     query = request.GET.get('query')
+    #print(query)
     context['query'] = query
     form = QueryForm(request.GET)
     context['form'] = form
@@ -27,18 +32,31 @@ def searchResults(request):
         # search in db
         try:
             paragraphs = None
-            obj = Word.objects.get(word=query.lower())
-            par_list =  obj.paragraphs.all() #Paragraph.objects.order_by('id')[:5]
-            paginator = Paginator(par_list, 10)
-            page = request.GET.get('page')
-            try:
-                paragraphs = paginator.page(page)
-            except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                paragraphs = paginator.page(1)
-            except EmptyPage:
-                # If page is out of range, deliver last page of results
-                paragraphs = paginator.page(paginator.num_pages)
+
+            # parse the query
+            tokens = anna_lexer(query)
+            #print(tokens)
+            parse_result = parse(tokens)
+
+            if not parse_result:
+                print('Parsing error')
+            else:
+                ast = parse_result.value
+                #print(ast)
+
+                # get list for paginator
+                res = [i for i in ast.eval()]
+                context['num_paragraphs'] = len(res)
+                paginator = Paginator(res, 10)
+                page = request.GET.get('page')
+                try:
+                    paragraphs = paginator.page(page)
+                except PageNotAnInteger:
+                    # If page is not an integer, deliver first page.
+                    paragraphs = paginator.page(1)
+                except EmptyPage:
+                    # If page is out of range, deliver last page of results
+                    paragraphs = paginator.page(paginator.num_pages)
             context['paragraphs'] = paragraphs
         except Word.DoesNotExist:
             print('Err: obj Word("{q}") does not exist'.format(q=query))
