@@ -18,6 +18,12 @@
         </form>
     </div>
     <div class="row medium-10 large-9 columns">
+        {% if error %}
+            <h6 class="subheader">{{ error }}</h6>
+        {% endif %}
+        {% if not query %}
+            <h6 class="subheader">Empty query</h6>
+        {% endif %}
         {% if num_paragraphs == 0 %}
             <h6 class="subheader">No paragraphs matching your query</h6>
         {% endif %}
@@ -30,34 +36,34 @@
         {% endif %}
         <hr>
         {% if paragraphs %}
-        <ul class="pagination" role="navigation" aria-label="Pagination">
-            {% if paragraphs.has_previous %}
-                <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
-            {% endif %}
-            <span class="current">
-                Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
-            </span>
-            {% if paragraphs.has_next %}
-                <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
-            {% endif %}
-        </ul>
-        <ul class="no-bullet">
-            {% for paragraph in paragraphs %}
-                <li><p>{{ paragraph.text }}</p></li>
-            {% endfor %}
-        </ul>
-        <ul class="pagination" role="navigation" aria-label="Pagination">
-            {% if paragraphs.has_previous %}
-                <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
-            {% endif %}
-            <span class="current">
-                Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
-            </span>
-            {% if paragraphs.has_next %}
-                <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
-            {% endif %}
-        </ul>
-        <hr>
+            <ul class="pagination" role="navigation" aria-label="Pagination">
+                {% if paragraphs.has_previous %}
+                    <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
+                {% endif %}
+                <span class="current">
+                    Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
+                </span>
+                {% if paragraphs.has_next %}
+                    <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
+                {% endif %}
+            </ul>
+            <ul class="no-bullet">
+                {% for paragraph in paragraphs %}
+                    <li><p>{{ paragraph.text }}</p></li>
+                {% endfor %}
+            </ul>
+            <ul class="pagination" role="navigation" aria-label="Pagination">
+                {% if paragraphs.has_previous %}
+                    <li class="pagination-previous"><a href="?query={{ query }}&page={{ paragraphs.previous_page_number }}">prev</a></li>
+                {% endif %}
+                <span class="current">
+                    Page {{ paragraphs.number }} of {{ paragraphs.paginator.num_pages }}
+                </span>
+                {% if paragraphs.has_next %}
+                    <li class="pagination-next"><a href="?query={{ query }}&page={{ paragraphs.next_page_number }}" aria-label="Next page">next</a></li>
+                {% endif %}
+            </ul>
+            <hr>
         {% else %}
             <p>No paragraphs available</p>
         {% endif %}

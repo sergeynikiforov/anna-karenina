@@ -81,6 +81,7 @@ DATABASES = {
         'NAME': 'anna_db',
         'USER': 'anna_app',
         'PASSWORD': 'qwertY1!',
+        'CONN_MAX_AGE': None,
         'OPTIONS': {
                     'charset': 'utf8mb4',
         },

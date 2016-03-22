@@ -16,7 +16,7 @@ class WordExpression:
     def eval(self):
         try:
             obj = Word.objects.get(word=self.i.lower())
-            par_list = obj.paragraphs.all()
+            par_list = obj.paragraphs.all().iterator()
         except Word.DoesNotExist:
             return set([])
         return set(par_list)

@@ -8,13 +8,13 @@ WORD     = 'WORD'
 
 # list of tuples of regexes and corresponding tags for lex function
 token_exprs = [
-    (r'[\s]+',      None),     # ignore whitespace
-    (r'\(',         RESERVED), # we need brackets for precedence
-    (r'\)',         RESERVED), # we need brackets for precedence
-    (r'AND',        RESERVED), # represents logical AND op
-    (r'OR',         RESERVED), # represents logical OR op
-    (r'NOT',        RESERVED), # represents logical NOT op
-    (r'[\w]+',      WORD),     # matches a single word for search
+    (r'[\s]+',          None),     # ignore whitespace
+    (r'\(',             RESERVED), # we need brackets for precedence
+    (r'\)',             RESERVED), # we need brackets for precedence
+    (r'AND',            RESERVED), # represents logical AND op
+    (r'OR',             RESERVED), # represents logical OR op
+    (r'NOT',            RESERVED), # represents logical NOT op
+    (r'[^\s\(\)]+',     WORD),     # matches a single word for search
 ]
 
 

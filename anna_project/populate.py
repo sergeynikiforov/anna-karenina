@@ -36,26 +36,22 @@ def populate(filepath):
 
         for line in f:
             # create paragraph
-            cur_papagraph = Paragraph.objects.create(text=line)
+            cur_paragraph = Paragraph.objects.create(text=line)
             p_counter += 1
 
             # get words from the line
-            word_list = (w.lower() for w in reg_obj.findall(line))
+            words = (w.lower() for w in reg_obj.findall(line))
 
             # add words to DB
-            for word in word_list:
+            for word in words:
                 if word in all_words:
-                    all_words[word].paragraphs.add(cur_papagraph)
+                    all_words[word].paragraphs.add(cur_paragraph)
                 else:
                     obj = Word.objects.create(word=word)
-                    obj.paragraphs.add(cur_papagraph)
+                    obj.paragraphs.add(cur_paragraph)
                     all_words[word] = obj
-                #obj, created = Word.objects.get_or_create(word=word)
-                #obj.paragraphs.add(cur_papagraph)
-                #all_words.add(word)
     elapsed = time.time() - start
-    w_counter = len(all_words) #Word.objects.count()
-    print('{} words were added to the Word table\n{} paragraphs were added to the Paragraph table'.format(w_counter, p_counter))
+    print('{} words were added to the Word table\n{} paragraphs were added to the Paragraph table'.format(len(all_words), p_counter))
     print('Running time: {}'.format(elapsed))
     return
 
